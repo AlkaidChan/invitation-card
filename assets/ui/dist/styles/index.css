@@ -1,0 +1,142 @@
+@import url(./icons/iconfont.css);
+@import url(./utils.css);
+@import url(./pages.css);
+
+html {
+  overflow: hidden;
+}
+
+* {
+  font-family: 'Songti SC', SimSun, STSong, 宋体, sans-serif, -apple-system, BlinkMacSystemFont, Source Sans Pro, Helvetica Neue, Arial, PingFang SC, Microsoft YaHei;
+  font-weight: 400;
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  font-size: 16px;
+}
+
+/* 视频首次播放时不允许翻页 */
+body {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow: hidden;
+  height: 100vh;
+  background-color: #ddbdba;
+}
+
+.main {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.music {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+  width: 30px;
+  height: 30px;
+  z-index: 999;
+  opacity: 0;
+}
+
+.music i {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+  opacity: 0.5;
+}
+
+/* ----视频播放器遮罩---- */
+.video-cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: #ddbdba;
+}
+
+.video-cover p {
+  font-size: 36px;
+  color: #a14e47;
+  margin-bottom: 20px;
+}
+
+.video-cover .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  background-color: #a14e47;
+  color: #ddbdba;
+  font-size: 36px;
+  margin-top: 40px;
+}
+
+/* ----翻页器---- */
+.pager {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 40px;
+}
+
+.pager-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  width: 40px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.5); /* 半透明背景 */
+  opacity: 0;
+  z-index: 999;
+}
+
+.pager-btn i {
+  color: #000;
+  opacity: 0.5;
+}
+
+.pager-btn.pre {
+  top: 15px;
+}
+
+.pager-btn.next {
+  bottom: 15px;
+}
+
+a {
+  color: #000;
+  text-decoration: underline 3px #a14e47;
+}
+
+@supports (backdrop-filter: blur(10px)) {
+  .music
+  .pager-btn {
+    background: rgba(255, 255, 255, 0.2); /* 半透明背景 */
+    backdrop-filter: blur(10px); /* 关键属性：毛玻璃模糊 */
+  }
+}

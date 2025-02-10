@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path"
 
 	"github.com/gin-gonic/gin"
@@ -11,6 +11,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"gorm.io/gorm"
 
+	"github.com/alkaidchen/invitation-card/assets"
 	"github.com/alkaidchen/invitation-card/pkg/config"
 	"github.com/alkaidchen/invitation-card/pkg/log"
 	"github.com/alkaidchen/invitation-card/pkg/model"
@@ -19,12 +20,13 @@ import (
 
 // App application
 type App struct {
-	config *config.Config
-	bolt   *bbolt.DB
-	db     *gorm.DB
-	server *gin.Engine
-	Home   string
-	Logger *zap.Logger
+	config      *config.Config
+	bolt        *bbolt.DB
+	db          *gorm.DB
+	server      *gin.Engine
+	embedServer *assets.EmbedServer
+	Home        string
+	Logger      *zap.Logger
 }
 
 // New create an instance of App
@@ -47,6 +49,7 @@ func (m *App) Init() error {
 		m.initLogger,
 		m.initConfig,
 		m.initDAO,
+		m.initEmbedServer,
 		m.initRouter,
 	} {
 		if err := f(); err != nil {
@@ -67,7 +70,7 @@ func (m *App) initLogger() error {
 
 func (m *App) initConfig() error {
 	var cfg = &config.Config{}
-	c, err := ioutil.ReadFile(path.Join(m.Home, "config.yaml"))
+	c, err := os.ReadFile(path.Join(m.Home, "config.yaml"))
 	if err != nil {
 		log.Error("read config file failed, ", err.Error())
 		return m.initDefaultConfig()
@@ -81,9 +84,15 @@ func (m *App) initConfig() error {
 	return nil
 }
 
+func (m *App) initEmbedServer() error {
+	server := assets.NewEmbedServer()
+	m.embedServer = server
+	return nil
+}
+
 func (m *App) initDefaultConfig() error {
 	var cfg = &config.Config{}
-	cfg.Database.SQLite.Path = path.Join(m.Home, "megrez.db")
+	cfg.Database.SQLite.Path = path.Join(m.Home, "invitation-card.db")
 	cfg.Debug = true
 	m.config = cfg
 	return nil
@@ -121,7 +130,7 @@ func (m *App) initDAO() error {
 }
 
 func (m *App) initRouter() error {
-	server, err := router.NewRouter(m.Logger, m.config.Debug)
+	server, err := router.NewRouter(m.Logger, m.embedServer, m.config.Debug)
 	if err != nil {
 		log.Error("init router failed, ", err)
 		return err

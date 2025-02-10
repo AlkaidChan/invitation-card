@@ -5,12 +5,12 @@ import (
 	"log"
 )
 
-// @title           Megrez backend API
+// @title           Marston invitation card backend API
 // @version         1.0
-// @description     This is a megrez backend server.
+// @description     This is a Marston invitation card backend server.
 // @termsOfService  http://megrez.run
 
-// @contact.name   Megrez
+// @contact.name   Marston invitation card
 // @contact.url    http://megrez.run
 // @contact.email  alkaidchen@qq.com
 
@@ -21,11 +21,11 @@ import (
 // @BasePath  /
 
 func main() {
-	megrez := app.New()
-	if err := megrez.Init(); err != nil {
+	a := app.New()
+	if err := a.Init(); err != nil {
 		log.Fatal("application init failed, ", err)
 	}
-	if err := megrez.Run(); err != nil {
+	if err := a.Run(); err != nil {
 		log.Fatal("application run failed, ", err)
 	}
 }
