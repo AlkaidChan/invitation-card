@@ -9,7 +9,7 @@ import (
 
 // nolint:typecheck
 //
-//go:embed ui/dist
+//go:embed styles bundle.js index.html
 var FrontendAssets embed.FS
 
 var (
@@ -34,12 +34,9 @@ func NewEmbedServer() *EmbedServer {
 	}
 	root := http.FS(dist)
 
-	// 模板路径
-	tpl := template.Must(template.New("").ParseFS(FrontendAssets, "ui/dist/*.html"))
 
 	s := &EmbedServer{
 		dist:     dist,
-		tpl:      tpl,
 		fsServer: http.FileServer(root),
 	}
 	return s

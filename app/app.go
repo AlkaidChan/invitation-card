@@ -36,7 +36,7 @@ func New() *App {
 
 // Run run blog application
 func (m *App) Run() error {
-	err := m.server.Run()
+	err := m.server.Run(fmt.Sprintf(":9999"))
 	if err != nil {
 		return err
 	}

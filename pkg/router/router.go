@@ -1,7 +1,6 @@
 package router
 
 import (
-	"io/fs"
 	"net/http"
 	"time"
 
@@ -28,25 +27,26 @@ func NewRouter(logger *zap.Logger, embedServer *assets.EmbedServer, debug bool) 
 
 	g.POST("api/submit", api.Submit)
 
-	g.StaticFS("/ui/dist", http.FS(assets.FrontendAssets))
-	g.NoRoute(func(c *gin.Context) {
-		//设置响应状态
-		c.Writer.WriteHeader(http.StatusOK)
-		indexHTML, err := fs.ReadFile(assets.FrontendAssets, "ui/dist/index.html")
-		if err != nil {
-			c.Writer.WriteString("index.html not found, err: " + err.Error())
-			return
-		}
-		_, err = c.Writer.Write(indexHTML)
-		if err != nil {
-			c.Writer.WriteString("write index.html failed, err: " + err.Error())
-			c.Redirect(http.StatusInternalServerError, "/error")
-			return
-		}
-		c.Writer.Header().Add("Accept", "text/html")
-		c.Writer.Flush()
-		return
-	})
+	g.StaticFS("/", http.FS(assets.FrontendAssets))
+
+	// g.NoRoute(func(c *gin.Context) {
+	// 	//设置响应状态
+	// 	c.Writer.WriteHeader(http.StatusOK)
+	// 	indexHTML, err := fs.ReadFile(assets.FrontendAssets, "ui/dist/index.html")
+	// 	if err != nil {
+	// 		c.Writer.WriteString("index.html not found, err: " + err.Error())
+	// 		return
+	// 	}
+	// 	_, err = c.Writer.Write(indexHTML)
+	// 	if err != nil {
+	// 		c.Writer.WriteString("write index.html failed, err: " + err.Error())
+	// 		c.Redirect(http.StatusInternalServerError, "/error")
+	// 		return
+	// 	}
+	// 	c.Writer.Header().Add("Accept", "text/html")
+	// 	c.Writer.Flush()
+	// 	return
+	// })
 
 	return g, nil
 }

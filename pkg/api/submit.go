@@ -24,7 +24,7 @@ func Submit(c *gin.Context) {
 	err := c.ShouldBindJSON(&data)
 	if err != nil {
 		log.Error(err.Error())
-		c.JSON(http.StatusOK, errmsg.ErrorInvalidParam)
+		c.JSON(http.StatusBadRequest, errmsg.ErrorInvalidParam)
 		return
 	}
 	item := data.Transfer2Model()
@@ -35,7 +35,7 @@ func Submit(c *gin.Context) {
 	if err != nil {
 		log.Error(err)
 		tx.Rollback()
-		c.JSON(http.StatusOK, errmsg.Error())
+		c.JSON(http.StatusInternalServerError, errmsg.Error())
 		return
 	}
 
